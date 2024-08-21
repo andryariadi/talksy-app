@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoute from "./routes/auth.route.js";
+import messageRoute from "./routes/message.route.js";
 import connectToMongoDB from "./db/connectToMongoDB.js";
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoute);
+app.use("/api/messages", messageRoute);
 
 app.listen(port, () => {
   connectToMongoDB();
