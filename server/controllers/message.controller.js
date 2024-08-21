@@ -28,10 +28,31 @@ class Controller {
         conversation.messages.push(newMessage._id);
       }
 
-      await conversation.save();
-      await newMessage.save();
+      Promise.all([conversation.save(), newMessage.save()]);
 
       res.status(201).json({ newMessage, message: "Message sent successfully!" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Internal server error!" });
+    }
+  }
+
+  static async getMessages(req, res) {
+    const { id: userToChatId } = req.params;
+    const senderId = req.user._id;
+
+    console.log(userToChatId, senderId);
+
+    try {
+      const conversation = await Conversation.findOne({
+        patisipants: { $all: [senderId, userToChatId] },
+      }).populate("messages");
+
+      if (!conversation) return res.status(200).json([]);
+
+      const messages = conversation.messages;
+
+      res.status(200).json(messages);
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Internal server error!" });
