@@ -1,19 +1,20 @@
+import generateTokenAndSetCookie from "../libs/genetateToken.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
 class Controller {
   static async singup(req, res) {
-    const { fullName, username, password, confirmPassword, gender } = req.body;
+    const { fullName, username, password, confirmPassword, gender, profilePicture } = req.body;
 
     try {
       if (password !== confirmPassword) {
-        return res.status(400).json({ message: "Passwords do not match!" });
+        return res.status(400).json({ error: "Passwords do not match!" });
       }
 
       const userExists = await User.findOne({ username });
 
       if (userExists) {
-        return res.status(400).json({ message: "User already exists!" });
+        return res.status(400).json({ error: "User already exists!" });
       }
 
       const hashPassword = await bcrypt.hash(password, 10);
@@ -27,17 +28,19 @@ class Controller {
         username,
         password: hashPassword,
         gender,
-        profilePicture: gender === "male" ? boyProfilePic : girlProfilePic,
+        profilePicture: profilePicture ? profilePicture : gender === "male" ? boyProfilePic : girlProfilePic,
       });
 
-      await newUser.save();
-
-      console.log(newUser);
-
+      if (newUser) {
+        generateTokenAndSetCookie(newUser._id, res);
+        await newUser.save();
+      } else {
+        return res.status(400).json({ error: "Invalid user data!" });
+      }
       res.status(201).json({ newUser, message: "User created successfully!" });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Internal server error!" });
+      res.status(500).json({ error: "Internal server error!" });
     }
   }
 
