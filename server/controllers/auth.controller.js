@@ -45,11 +45,38 @@ class Controller {
   }
 
   static async login(req, res) {
-    res.send("login bosss");
+    const { username, password } = req.body;
+
+    try {
+      const user = await User.findOne({ username });
+
+      if (!user) {
+        return res.status(400).json({ error: "User not found!" });
+      }
+
+      const isPassword = await bcrypt.compare(password, user?.password || "");
+
+      if (!isPassword) {
+        return res.status(400).json({ error: "Incorrect password!" });
+      }
+
+      generateTokenAndSetCookie(user._id, res);
+
+      res.status(200).json({ user, message: "Login successfully!" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Internal server error!" });
+    }
   }
 
   static async logout(req, res) {
-    res.send("logout");
+    try {
+      res.clearCookie("userToken");
+      res.status(200).json({ message: "Logout successfully!" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Internal server error!" });
+    }
   }
 }
 
