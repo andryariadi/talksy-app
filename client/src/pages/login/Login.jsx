@@ -17,16 +17,17 @@ const Login = () => {
             Username
           </label>
           <div className="bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
-            <input type="text" placeholder="Username" className="bg-transparent outline-none placeholder:text-xs" />
+            <input type="text" placeholder="Username" className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
             <CiUser size={20} className="text-gray-500" />
           </div>
         </div>
+
         <div className="flex flex-col gap-2">
           <label htmlFor="" className="text-xs">
             Password
           </label>
           <div className="bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
-            <input type="text" placeholder="Password" className="bg-transparent outline-none placeholder:text-xs" />
+            <input type={isPassword ? "text" : "password"} placeholder="Password" className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
             {isPassword ? (
               <IoIosEyeOff size={24} className="text-gray-500 cursor-pointer" onClick={() => setIsPassword(!isPassword)} />
             ) : (
@@ -34,6 +35,7 @@ const Login = () => {
             )}
           </div>
         </div>
+
         <div className="flex flex-col gap-2">
           <span className="text-xs">Dont have an account?</span>
           <button className="bg-primary text-white text-xs p-3 rounded-lg ">Login</button>
