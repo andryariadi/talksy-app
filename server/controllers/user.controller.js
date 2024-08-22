@@ -4,7 +4,7 @@ class Controller {
   static async getUsers(req, res) {
     const currentUserId = req.user._id;
     try {
-      const users = await User.find({ _id: { $ne: currentUserId } });
+      const users = await User.find({ _id: { $ne: currentUserId } }).select("-password");
 
       res.status(200).json(users);
     } catch (error) {

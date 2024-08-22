@@ -1,0 +1,46 @@
+import { useState } from "react";
+import { CiUser } from "react-icons/ci";
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+
+const Login = () => {
+  const [isPassword, setIsPassword] = useState(false);
+
+  return (
+    <div className="bg-purple-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 flex flex-col gap-4 p-8">
+      <h1 className="text-4xl font-bold text-center text-white">
+        Login <span className="text-primary">Talksy</span>
+      </h1>
+
+      <form action="" className="flex flex-col gap-4 text-neutral-100">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="" className="text-xs">
+            Username
+          </label>
+          <div className="bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
+            <input type="text" placeholder="Username" className="bg-transparent outline-none placeholder:text-xs" />
+            <CiUser size={20} className="text-gray-500" />
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="" className="text-xs">
+            Password
+          </label>
+          <div className="bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
+            <input type="text" placeholder="Password" className="bg-transparent outline-none placeholder:text-xs" />
+            {isPassword ? (
+              <IoIosEyeOff size={24} className="text-gray-500 cursor-pointer" onClick={() => setIsPassword(!isPassword)} />
+            ) : (
+              <IoIosEye size={24} className="text-gray-500 cursor-pointer" onClick={() => setIsPassword(!isPassword)} />
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <span className="text-xs">Dont have an account?</span>
+          <button className="bg-primary text-white text-xs p-3 rounded-lg ">Login</button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
