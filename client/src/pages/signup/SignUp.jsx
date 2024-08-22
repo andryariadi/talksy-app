@@ -67,7 +67,7 @@ const SignUp = () => {
         </div>
 
         <div className="flex flex-col gap-2 col-span-2">
-          <span className="text-xs">Already have an account?</span>
+          <span className="text-xs hover:text-primary transition-all duration-300 cursor-pointer">Already have an account?</span>
           <button className="bg-primary text-white text-xs p-3 rounded-lg ">Login</button>
         </div>
       </form>

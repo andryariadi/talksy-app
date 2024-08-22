@@ -37,7 +37,7 @@ const Login = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <span className="text-xs">Dont have an account?</span>
+          <span className="text-xs hover:text-primary transition-all duration-300 cursor-pointer">Dont have an account?</span>
           <button className="bg-primary text-white text-xs p-3 rounded-lg ">Login</button>
         </div>
       </form>
