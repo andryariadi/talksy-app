@@ -111,7 +111,9 @@ const SignUp = () => {
           <Link to="/login" className="text-xs hover:text-primary transition-all duration-300">
             Already have an account?
           </Link>
-          <button className="bg-primary text-white text-xs p-3 rounded-lg ">{loading ? <LoaderBtn /> : "Login"}</button>
+          <button disabled={loading} className="bg-primary text-white text-xs p-3 rounded-lg ">
+            {loading ? <LoaderBtn /> : "Login"}
+          </button>
         </div>
       </form>
     </div>

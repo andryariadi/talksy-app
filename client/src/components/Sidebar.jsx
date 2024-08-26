@@ -31,7 +31,15 @@ const Sidebar = () => {
       </div>
 
       {/* Bottom */}
-      <div>{loading ? <LoaderBtn /> : <RiLogoutCircleLine size={20} className="hover:text-primary transition-all duration-300 cursor-pointer" onClick={logout} />}</div>
+      <div>
+        {loading ? (
+          <LoaderBtn />
+        ) : (
+          <button disabled={loading}>
+            <RiLogoutCircleLine size={20} className="hover:text-primary transition-all duration-300 cursor-pointer" onClick={logout} />
+          </button>
+        )}
+      </div>
     </div>
   );
 };
