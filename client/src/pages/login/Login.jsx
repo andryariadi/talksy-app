@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CiUser } from "react-icons/ci";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [isPassword, setIsPassword] = useState(false);
@@ -37,7 +38,9 @@ const Login = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <span className="text-xs hover:text-primary transition-all duration-300 cursor-pointer">Dont have an account?</span>
+          <Link to="/signup" className="text-xs hover:text-primary transition-all duration-300">
+            Dont have an account?
+          </Link>
           <button className="bg-primary text-white text-xs p-3 rounded-lg ">Login</button>
         </div>
       </form>
