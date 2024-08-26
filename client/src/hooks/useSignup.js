@@ -34,10 +34,9 @@ const useSignup = () => {
 
       localStorage.setItem("authUser", JSON.stringify(res));
 
-      setCurrentUser(res);
+      setCurrentUser(res.data);
 
-      toast.success("Account created successfully", {
-        position: "top-right",
+      toast.success("Account created successfully!", {
         style: {
           borderRadius: "10px",
           background: "#333",
@@ -51,7 +50,6 @@ const useSignup = () => {
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
-        position: "top-right",
         style: {
           borderRadius: "10px",
           background: "#333",
@@ -71,7 +69,6 @@ export default useSignup;
 function handleInputErrors({ fullName, username, password, confirmPassword, gender }) {
   if (!fullName) {
     toast.error("Please enter a fullName", {
-      position: "top-right",
       style: {
         borderRadius: "10px",
         background: "#333",
@@ -82,7 +79,6 @@ function handleInputErrors({ fullName, username, password, confirmPassword, gend
   }
   if (fullName.length < 3 || fullName.length > 20) {
     toast.error("Fullname must be between 3 and 20 characters", {
-      position: "top-right",
       style: {
         borderRadius: "10px",
         background: "#333",
@@ -94,7 +90,6 @@ function handleInputErrors({ fullName, username, password, confirmPassword, gend
 
   if (!username) {
     toast.error("Please enter a username", {
-      position: "top-right",
       style: {
         borderRadius: "10px",
         background: "#333",
@@ -106,7 +101,6 @@ function handleInputErrors({ fullName, username, password, confirmPassword, gend
 
   if (username.length < 3 || username.length > 20) {
     toast.error("Username must be between 3 and 20 characters", {
-      position: "top-right",
       style: {
         borderRadius: "10px",
         background: "#333",
@@ -118,7 +112,6 @@ function handleInputErrors({ fullName, username, password, confirmPassword, gend
 
   if (!password) {
     toast.error("Please enter a password", {
-      position: "top-right",
       style: {
         borderRadius: "10px",
         background: "#333",
@@ -130,7 +123,6 @@ function handleInputErrors({ fullName, username, password, confirmPassword, gend
 
   if (password.length < 3 || password.length > 20) {
     toast.error("Password must be between 3 and 20 characters", {
-      position: "top-right",
       style: {
         borderRadius: "10px",
         background: "#333",
@@ -142,7 +134,6 @@ function handleInputErrors({ fullName, username, password, confirmPassword, gend
 
   if (!confirmPassword) {
     toast.error("Please confirm your password", {
-      position: "top-right",
       style: {
         borderRadius: "10px",
         background: "#333",
@@ -154,7 +145,6 @@ function handleInputErrors({ fullName, username, password, confirmPassword, gend
 
   if (password !== confirmPassword) {
     toast.error("Passwords do not match", {
-      position: "top-right",
       style: {
         borderRadius: "10px",
         background: "#333",
@@ -166,7 +156,6 @@ function handleInputErrors({ fullName, username, password, confirmPassword, gend
 
   if (!gender) {
     toast.error("Please select a gender", {
-      position: "top-right",
       style: {
         borderRadius: "10px",
         background: "#333",

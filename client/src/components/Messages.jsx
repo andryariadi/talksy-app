@@ -2,7 +2,7 @@ import { IoLogoWechat } from "react-icons/io5";
 import { IoIosSend } from "react-icons/io";
 
 const Messages = () => {
-  const open = true;
+  const open = false;
   return (
     <>
       {open ? (

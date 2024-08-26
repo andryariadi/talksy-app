@@ -15,7 +15,7 @@ function App() {
           <Route path="/signup" element={currentUser ? <Navigate to="/" /> : <SignUp />} />
           <Route path="/login" element={currentUser ? <Navigate to="/" /> : <Login />} />
         </Routes>
-        <Toaster />
+        <Toaster position="top-right" />
       </main>
     </>
   );

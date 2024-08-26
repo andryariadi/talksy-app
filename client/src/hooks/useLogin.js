@@ -25,10 +25,9 @@ const useLogin = () => {
 
       localStorage.setItem("authUser", JSON.stringify(res));
 
-      setCurrentUser(res);
+      setCurrentUser(res.data);
 
-      toast.success("Logged in successfully", {
-        position: "top-right",
+      toast.success("Logged in successfully!", {
         style: {
           borderRadius: "10px",
           background: "#333",
@@ -38,7 +37,6 @@ const useLogin = () => {
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.error, {
-        position: "top-right",
         style: {
           borderRadius: "10px",
           background: "#333",
@@ -58,7 +56,6 @@ export default useLogin;
 function handleInputErrors({ username, password }) {
   if (!username) {
     toast.error("Please enter a username", {
-      position: "top-right",
       style: {
         borderRadius: "10px",
         background: "#333",
@@ -70,7 +67,6 @@ function handleInputErrors({ username, password }) {
 
   if (!password) {
     toast.error("Please enter a password", {
-      position: "top-right",
       style: {
         borderRadius: "10px",
         background: "#333",
