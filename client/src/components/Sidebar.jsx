@@ -1,8 +1,12 @@
 import { BiSearchAlt } from "react-icons/bi";
 import { BsFillChatDotsFill } from "react-icons/bs";
 import { RiLogoutCircleLine } from "react-icons/ri";
+import useLogout from "../hooks/useLogout";
+import { LoaderBtn } from "./Loading";
 
 const Sidebar = () => {
+  const { loading, logout } = useLogout();
+
   return (
     <div className="bg-violt-500 flex flex-col gap-10 border-e-[1px] border-slate-500 border-opacity-50 p-8">
       {/* Top */}
@@ -27,9 +31,7 @@ const Sidebar = () => {
       </div>
 
       {/* Bottom */}
-      <div>
-        <RiLogoutCircleLine size={20} className="hover:text-primary transition-all duration-300 cursor-pointer" />
-      </div>
+      <div>{loading ? <LoaderBtn /> : <RiLogoutCircleLine size={20} className="hover:text-primary transition-all duration-300 cursor-pointer" onClick={logout} />}</div>
     </div>
   );
 };
