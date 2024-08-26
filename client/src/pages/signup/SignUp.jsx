@@ -4,6 +4,7 @@ import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 import GenderCheckbox from "./GenderCheckbox";
 import { Link } from "react-router-dom";
 import useSignup from "../../hooks/useSignup";
+import { LoaderBtn } from "../../components/Loading";
 
 const SignUp = () => {
   const [isPassword, setIsPassword] = useState(false);
@@ -110,7 +111,7 @@ const SignUp = () => {
           <Link to="/login" className="text-xs hover:text-primary transition-all duration-300">
             Already have an account?
           </Link>
-          <button className="bg-primary text-white text-xs p-3 rounded-lg ">Login</button>
+          <button className="bg-primary text-white text-xs p-3 rounded-lg ">{loading ? <LoaderBtn /> : "Login"}</button>
         </div>
       </form>
     </div>

@@ -1,9 +1,14 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 
 const useSignup = () => {
   const [loading, setLoading] = useState(false);
+  //   const navigate = useNavigate();
+
+  const { setCurrentUser } = useAuthContext();
 
   const signup = async ({ fullName, username, password, confirmPassword, gender }) => {
     const success = handleInputErrors({
@@ -25,6 +30,12 @@ const useSignup = () => {
         gender,
       });
 
+      if (res.error) throw new Error(res.error);
+
+      localStorage.setItem("authUser", JSON.stringify(res));
+
+      setCurrentUser(res);
+
       toast.success("Account created successfully", {
         position: "top-right",
         style: {
@@ -33,6 +44,8 @@ const useSignup = () => {
           color: "#fff",
         },
       });
+
+      //   navigate("/login");
 
       console.log(res, "<---disignuphook");
     } catch (error) {
