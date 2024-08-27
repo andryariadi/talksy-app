@@ -1,15 +1,17 @@
 import { BiSearchAlt } from "react-icons/bi";
-import { BsFillChatDotsFill } from "react-icons/bs";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import useLogout from "../hooks/useLogout";
-import { LoaderBtn } from "./Loading";
+import { LoaderBtn, LoaderComponent } from "./Loading";
 import useGetConversation from "../hooks/useGetConversation";
+import { getRandomEmoji } from "../utils/emojis";
+import useConversationStore from "../libs/conversationStore";
 
 const Sidebar = () => {
   const { loading, logout } = useLogout();
-  const { isLoading, conversation } = useGetConversation();
+  const { isLoading, conversations } = useGetConversation();
+  const { selectedConversation, setSelectedConversation } = useConversationStore();
 
-  console.log({ isLoading, conversation }, "<----disidebar");
+  console.log({ isLoading, conversations }, "<----disidebar");
 
   return (
     <div className="bg-violt-500 flex flex-col gap-10 border-e-[1px] border-slate-500 border-opacity-50 p-8">
@@ -23,26 +25,37 @@ const Sidebar = () => {
 
       {/* Center */}
       <div className="scrollbar-hide bg-tal-500 flex flex-col gap-4 py-5 border-t-[1px] border-slate-500 border-opacity-50 max-h-96 overflow-y-scroll">
-        {[...Array(10)].map((_, i) => (
-          <div className="bg-ros-500 flex items-center gap-24 p-2 border-b-[1px] border-slate-500 hover:border-primary transition-all duration-300" key={i}>
-            <div className="flex items-center gap-2">
-              <img src="/noAvatar.png" alt="Avatar" className="w-12 h-w-12 rounded-full border-[1px] border-slate-500 border-opacity-50 p-1" />
-              <span>Andry Ariadi</span>
-            </div>
-            <BsFillChatDotsFill size={20} className="text-gray-500" />
-          </div>
-        ))}
+        {isLoading ? (
+          <LoaderComponent />
+        ) : conversations.length > 0 ? (
+          conversations.map((conversation, idx) => {
+            const lastIdx = idx === conversations.length - 1;
+            const isSelected = conversation._id === selectedConversation?._id;
+
+            return (
+              <div
+                className={`${isSelected ? "bg-primary rounded-md" : ""} flex items-center gap-24 p-2 ${!lastIdx ? "border-b-[1px] border-slate-500 border-opacity-50" : ""} hover:border-primary transition-all duration-300 cursor-pointer`}
+                key={conversation._id}
+                onClick={() => setSelectedConversation(conversation)}
+              >
+                <div className="flex items-center gap-2 flex-1">
+                  <img src={conversation.profilePicture || "/noAvatar.png"} alt="Avatar" className="w-12 h-12 rounded-full border-[1px] border-slate-500 border-opacity-50 p-1" />
+                  <span>{conversation.fullName || conversation.username}</span>
+                </div>
+                <span>{getRandomEmoji()}</span>
+              </div>
+            );
+          })
+        ) : (
+          <div className="text-gray-500 text-center">No conversations found</div>
+        )}
       </div>
 
       {/* Bottom */}
       <div>
-        {loading ? (
-          <LoaderBtn />
-        ) : (
-          <button disabled={loading}>
-            <RiLogoutCircleLine size={20} className="hover:text-primary transition-all duration-300 cursor-pointer" onClick={logout} />
-          </button>
-        )}
+        <button onClick={logout} disabled={loading} className="flex items-center justify-center">
+          {loading ? <LoaderBtn /> : <RiLogoutCircleLine size={20} className="hover:text-primary transition-all duration-300 cursor-pointer" />}
+        </button>
       </div>
     </div>
   );

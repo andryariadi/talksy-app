@@ -10,7 +10,7 @@ const toastStyle = {
 
 const useGetConversation = () => {
   const [isLoading, setLoading] = useState(false);
-  const [conversation, setConversation] = useState([]);
+  const [conversations, setConversations] = useState([]);
 
   useEffect(() => {
     const getConversations = async () => {
@@ -22,7 +22,7 @@ const useGetConversation = () => {
 
         console.log(res.data, "<----dihookconversation");
 
-        setConversation(res.data);
+        setConversations(res.data);
       } catch (error) {
         console.log(error);
         toast.error(error.response.data.error, {
@@ -36,7 +36,7 @@ const useGetConversation = () => {
     getConversations();
   }, []);
 
-  return { conversation, isLoading };
+  return { conversations, isLoading };
 };
 
 export default useGetConversation;

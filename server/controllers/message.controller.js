@@ -30,7 +30,7 @@ class Controller {
 
       Promise.all([conversation.save(), newMessage.save()]);
 
-      res.status(201).json({ newMessage, message: "Message sent successfully!" });
+      res.status(201).json({ newMessage });
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Internal server error!" });

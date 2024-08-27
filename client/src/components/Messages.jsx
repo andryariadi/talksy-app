@@ -1,16 +1,36 @@
 import { IoLogoWechat } from "react-icons/io5";
 import { IoIosSend } from "react-icons/io";
+import useConversationStore from "../libs/conversationStore";
+import { useEffect, useState } from "react";
+import useSendMessage from "../hooks/useSendMessage";
 
 const Messages = () => {
-  const open = false;
+  const { selectedConversation, setSelectedConversation } = useConversationStore();
+
+  const [message, setMessage] = useState("");
+  const { loading, sendMessage } = useSendMessage();
+
+  useEffect(() => {
+    return setSelectedConversation(null); //cleanup function (unmount)
+  }, [setSelectedConversation]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!message) return;
+
+    await sendMessage(message);
+    setMessage("");
+  };
+
   return (
     <>
-      {open ? (
+      {selectedConversation ? (
         <div className="bg-tal-500 flex flex-col gap-2 min-w-[30rem] h-full">
           {/* Top */}
           <div className="bg-secondary flex items-center gap-2 px-5 py-3">
             <span className="text-neutral-400 text-sm">To:</span>
-            <h1 className="text-primary text-xl font-semibold">Andry Ariadi</h1>
+            <h1 className="text-primary text-xl font-semibold">{selectedConversation.username}</h1>
           </div>
 
           {/* Center */}
@@ -38,10 +58,10 @@ const Messages = () => {
           </div>
 
           {/* Bottom */}
-          <form className="bg-sy-500 pb-2 px-5">
+          <form onSubmit={handleSubmit} className="bg-sy-500 pb-2 px-5">
             <div className="bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
-              <input type="text" placeholder="Type a message..." className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
-              <IoIosSend size={20} className="text-gray-500 hover:text-primary transition-all duration-300 cursor-pointer" />
+              <input type="text" name="message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type a message..." className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
+              {loading ? <div className="loading loading-spinner loading-xs"></div> : <IoIosSend size={20} className="text-gray-500 hover:text-primary transition-all duration-300 cursor-pointer" />}
             </div>
           </form>
         </div>
