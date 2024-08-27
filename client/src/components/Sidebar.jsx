@@ -1,5 +1,6 @@
 import { BiSearchAlt } from "react-icons/bi";
 import { RiLogoutCircleLine } from "react-icons/ri";
+import { GoDotFill } from "react-icons/go";
 import useLogout from "../hooks/useLogout";
 import { LoaderBtn, LoaderComponent } from "./Loading";
 import useGetConversation from "../hooks/useGetConversation";
@@ -38,9 +39,10 @@ const Sidebar = () => {
                 key={conversation._id}
                 onClick={() => setSelectedConversation(conversation)}
               >
-                <div className="flex items-center gap-2 flex-1">
+                <div className="relative flex items-center gap-2 flex-1">
                   <img src={conversation.profilePicture || "/noAvatar.png"} alt="Avatar" className="w-12 h-12 rounded-full border-[1px] border-slate-500 border-opacity-50 p-1" />
                   <span>{conversation.fullName || conversation.username}</span>
+                  <GoDotFill size={18} className="absolute top-0 left-8 text-green-600" />
                 </div>
                 <span>{getRandomEmoji()}</span>
               </div>

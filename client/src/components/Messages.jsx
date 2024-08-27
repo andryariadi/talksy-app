@@ -3,6 +3,7 @@ import { IoIosSend } from "react-icons/io";
 import useConversationStore from "../libs/conversationStore";
 import { useEffect, useState } from "react";
 import useSendMessage from "../hooks/useSendMessage";
+import { GoDotFill } from "react-icons/go";
 
 const Messages = () => {
   const { selectedConversation, setSelectedConversation } = useConversationStore();
@@ -28,9 +29,10 @@ const Messages = () => {
       {selectedConversation ? (
         <div className="bg-tal-500 flex flex-col gap-2 min-w-[30rem] h-full">
           {/* Top */}
-          <div className="bg-secondary flex items-center gap-2 px-5 py-3">
+          <div className="relative bg-secondary flex items-center gap-2 px-5 py-3">
             <span className="text-neutral-400 text-sm">To:</span>
             <h1 className="text-primary text-xl font-semibold">{selectedConversation.username}</h1>
+            <GoDotFill size={10} className="absolute top-5 left-12 text-green-600 animate-ping" />
           </div>
 
           {/* Center */}
