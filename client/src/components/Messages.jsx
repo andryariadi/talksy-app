@@ -60,7 +60,7 @@ const Messages = () => {
           {/* Bottom */}
           <form onSubmit={handleSubmit} className="bg-sy-500 pb-2 px-5">
             <div className="bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
-              <input type="text" name="message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type a message..." className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
+              <input type="text" name="message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type a message..." autoComplete="off" className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
               {loading ? <div className="loading loading-spinner loading-xs"></div> : <IoIosSend size={20} className="text-gray-500 hover:text-primary transition-all duration-300 cursor-pointer" />}
             </div>
           </form>
