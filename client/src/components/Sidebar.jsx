@@ -3,9 +3,13 @@ import { BsFillChatDotsFill } from "react-icons/bs";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import useLogout from "../hooks/useLogout";
 import { LoaderBtn } from "./Loading";
+import useGetConversation from "../hooks/useGetConversation";
 
 const Sidebar = () => {
   const { loading, logout } = useLogout();
+  const { isLoading, conversation } = useGetConversation();
+
+  console.log({ isLoading, conversation }, "<----disidebar");
 
   return (
     <div className="bg-violt-500 flex flex-col gap-10 border-e-[1px] border-slate-500 border-opacity-50 p-8">

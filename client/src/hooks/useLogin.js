@@ -3,6 +3,12 @@ import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 import axios from "axios";
 
+const toastStyle = {
+  borderRadius: "10px",
+  background: "#333",
+  color: "#fff",
+};
+
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const { setCurrentUser } = useAuthContext();
@@ -14,10 +20,16 @@ const useLogin = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:8000/api/auth/login", {
-        username,
-        password,
-      });
+      const res = await axios.post(
+        "http://localhost:8000/api/auth/login",
+        {
+          username,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
       console.log(res.data.error, "<----dilogincontext");
 
@@ -25,23 +37,15 @@ const useLogin = () => {
 
       localStorage.setItem("authUser", JSON.stringify(res));
 
-      setCurrentUser(res.data);
+      setCurrentUser(res);
 
       toast.success("Logged in successfully!", {
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
+        style: toastStyle,
       });
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.error, {
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
+        style: toastStyle,
       });
     } finally {
       setLoading(false);

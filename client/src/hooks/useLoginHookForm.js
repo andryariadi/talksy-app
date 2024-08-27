@@ -1,5 +1,12 @@
 import axios from "axios";
 import { useAuthContext } from "../context/AuthContext";
+import toast from "react-hot-toast";
+
+const toastStyle = {
+  borderRadius: "10px",
+  background: "#333",
+  color: "#fff",
+};
 
 const useLoginHookForm = () => {
   const { setCurrentUser } = useAuthContext();
@@ -11,9 +18,22 @@ const useLoginHookForm = () => {
         password,
       });
 
-      setCurrentUser(res.data);
+      console.log(res, "<---diloginhook");
+
+      if (res.error) throw new Error(res.error);
+
+      localStorage.setItem("authUser", JSON.stringify(res));
+
+      setCurrentUser(res.data.user);
+
+      toast.success("Logged in successfully!", {
+        style: toastStyle,
+      });
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.error, {
+        style: toastStyle,
+      });
     }
   };
 

@@ -25,11 +25,7 @@ const Login = () => {
 
   const handleSubmitLogin = async (data) => {
     console.log(data, "<-----dihookform");
-    try {
-      await loginForm(data);
-    } catch (error) {
-      console.log(error);
-    }
+    await loginForm(data);
   };
 
   console.log({ errors, isSubmitting }, "<----dihookform");
@@ -71,7 +67,7 @@ const Login = () => {
             <input type="text" placeholder="Username" {...register("username")} className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
             <CiUser size={20} className="text-gray-500" />
           </div>
-          {errors.username && <span className="text-rose-500 text-xs text-bold absolute -bottom-5">{errors.username.message}</span>}
+          {errors.username && <span className="text-rose-800 text-xs text-bold absolute -bottom-5">{errors.username.message}</span>}
         </div>
 
         <div className="flex flex-col gap-2 mb-2 relative">
@@ -86,7 +82,7 @@ const Login = () => {
               <IoIosEye size={24} className="text-gray-500 cursor-pointer" onClick={() => setIsPassword(!isPassword)} />
             )}
           </div>
-          {errors.password && <span className="text-rose-500 text-xs text-bold absolute -bottom-5">{errors.password.message}</span>}
+          {errors.password && <span className="text-rose-800 text-xs text-bold absolute -bottom-5">{errors.password.message}</span>}
         </div>
 
         <div className="flex flex-col gap-2">
