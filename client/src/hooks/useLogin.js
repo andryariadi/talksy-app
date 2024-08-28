@@ -37,7 +37,7 @@ const useLogin = () => {
 
       localStorage.setItem("authUser", JSON.stringify(res));
 
-      setCurrentUser(res);
+      setCurrentUser(res.data.user);
 
       toast.success("Logged in successfully!", {
         style: toastStyle,

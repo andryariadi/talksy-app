@@ -28,7 +28,7 @@ const useLoginHookForm = () => {
 
       if (res.error) throw new Error(res.error);
 
-      localStorage.setItem("authUser", JSON.stringify(res));
+      localStorage.setItem("authUser", JSON.stringify(res.data.user));
 
       setCurrentUser(res.data.user);
 

@@ -94,6 +94,7 @@ const result = await loginForm(data);
 };
 
 return (
+
 <div className="bg-purple-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10 flex flex-col gap-4 p-8">
 <h1 className="text-4xl font-bold text-center text-white">
 Login <span className="text-primary">Talksy</span>
@@ -141,3 +142,24 @@ Login <span className="text-primary">Talksy</span>
 };
 
 export default Login;
+
+// useAuthContext.js
+import { useContext } from "react";
+import { AuthContext } dari "./AuthContext";
+
+export const useAuthContext = () => {
+return useContext(AuthContext);
+};
+
+// AuthContext.js
+import { createContext, useState } from "react";
+
+export const AuthContext = createContext();
+
+export const AuthContextProvider = ({ children }) => {
+const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem("authUser")) || null);
+
+console.log(currentUser, "<----authcontextprovider");
+
+return <AuthContext.Provider value={{ currentUser, setCurrentUser }}>{children}</AuthContext.Provider>;
+};

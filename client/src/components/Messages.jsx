@@ -4,9 +4,17 @@ import useConversationStore from "../libs/conversationStore";
 import { useEffect, useState } from "react";
 import useSendMessage from "../hooks/useSendMessage";
 import { GoDotFill } from "react-icons/go";
+import useGetMessages from "../hooks/useGetMessages";
+import MessageSkeleton from "./MessageSkeleton";
+import { useAuthContext } from "../context/AuthContext";
+import { format } from "timeago.js";
 
 const Messages = () => {
   const { selectedConversation, setSelectedConversation } = useConversationStore();
+  const { isLoading, messages } = useGetMessages();
+  const { currentUser } = useAuthContext();
+
+  console.log(messages, "<-----dimessage");
 
   const [message, setMessage] = useState("");
   const { loading, sendMessage } = useSendMessage();
@@ -37,26 +45,39 @@ const Messages = () => {
 
           {/* Center */}
           <div className="bg-ros-500 flex flex-col flex-1 px-5 overflow-y-scroll scrollbar-hide">
-            {[...Array(10)].map((_, i) => (
-              <div className="chat chat-end" key={i}>
-                <div className="chat-image avatar">
-                  <div className="w-10 rounded-full">
-                    <img alt="User" src="/noAvatar.png" />
+            {!isLoading &&
+              messages.length > 0 &&
+              messages.map((message) => {
+                const isSender = message.senderId === currentUser._id;
+                const chatClassName = isSender ? "chat-end" : "chat-start";
+                const profilePic = isSender ? currentUser.profilePicture : selectedConversation.profilePicture;
+                const bubbleBgColor = isSender ? "bg-sky-500" : "";
+
+                console.log({ isSender, currentUser }, "<----disender");
+
+                return (
+                  <div className={`chat ${chatClassName} mb-3`} key={message._id}>
+                    <div className="chat-image avatar">
+                      <div className="w-10 rounded-full">
+                        <img alt="User" src={profilePic} />
+                      </div>
+                    </div>
+                    <div className={`chat-bubble ${bubbleBgColor} text-white`}>{message.message}</div>
+                    <div className="chat-footer opacity-50 text-sm"> {format(message.createdAt)}</div>
                   </div>
-                </div>
-                <div className="chat-bubble">I hate you!</div>
-                <div className="chat-footer opacity-50">Seen at 12:46</div>
+                );
+              })}
+
+            {isLoading && [...Array(4)].map((_, i) => <MessageSkeleton key={i} />)}
+
+            {!isLoading && messages.length === 0 && (
+              <div className="flex flex-col items-center justify-center gap-5 h-full">
+                <h2 className="text-xl">
+                  Send a message to {selectedConversation.username} <br /> to start a conversation!
+                </h2>
+                <IoLogoWechat size={70} className="text-gray-500 hover:text-primary transition-all duration-300" />
               </div>
-            ))}
-            <div className="chat chat-start">
-              <div className="chat-image avatar">
-                <div className="w-10 rounded-full">
-                  <img alt="User" src="/noAvatar.png" />
-                </div>
-              </div>
-              <div className="chat-bubble">I hate you!</div>
-              <div className="chat-footer opacity-50">Seen at 12:46</div>
-            </div>
+            )}
           </div>
 
           {/* Bottom */}
@@ -70,7 +91,7 @@ const Messages = () => {
       ) : (
         <div className="bg-tal-500 flex flex-col items-center justify-center gap-2 p-10 min-w-[30rem]">
           <h1 className="text-3xl">
-            Welcome <span className="text-primary font-bold">Andry Ariadi</span>
+            Welcome <span className="text-primary font-bold">{currentUser.fullName || currentUser.username}</span>
           </h1>
           <h2 className="text-xl">Select a chat to start messaging</h2>
           <IoLogoWechat size={70} className="text-gray-500 hover:text-primary transition-all duration-300" />
