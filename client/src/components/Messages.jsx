@@ -1,7 +1,7 @@
 import { IoLogoWechat } from "react-icons/io5";
 import { IoIosSend } from "react-icons/io";
 import useConversationStore from "../libs/conversationStore";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useSendMessage from "../hooks/useSendMessage";
 import { GoDotFill } from "react-icons/go";
 import useGetMessages from "../hooks/useGetMessages";
@@ -14,14 +14,20 @@ const Messages = () => {
   const { isLoading, messages } = useGetMessages();
   const { currentUser } = useAuthContext();
 
-  console.log(messages, "<-----dimessage");
-
   const [message, setMessage] = useState("");
   const { loading, sendMessage } = useSendMessage();
+
+  const lastMessageRef = useRef();
 
   useEffect(() => {
     return setSelectedConversation(null); //cleanup function (unmount)
   }, [setSelectedConversation]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  }, [messages]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,7 +62,7 @@ const Messages = () => {
                 console.log({ isSender, currentUser }, "<----disender");
 
                 return (
-                  <div className={`chat ${chatClassName} mb-3`} key={message._id}>
+                  <div className={`chat ${chatClassName} mb-3`} key={message._id} ref={lastMessageRef}>
                     <div className="chat-image avatar">
                       <div className="w-10 rounded-full">
                         <img alt="User" src={profilePic} />

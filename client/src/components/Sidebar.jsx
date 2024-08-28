@@ -6,26 +6,67 @@ import { LoaderBtn, LoaderComponent } from "./Loading";
 import useGetConversation from "../hooks/useGetConversation";
 import { getRandomEmoji } from "../utils/emojis";
 import useConversationStore from "../libs/conversationStore";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+
+const toastStyle = {
+  borderRadius: "10px",
+  background: "#333",
+  color: "#fff",
+};
 
 const Sidebar = () => {
   const { loading, logout } = useLogout();
-  const { isLoading, conversations } = useGetConversation();
+  const { isLoading, conversations, setConversations } = useGetConversation();
   const { selectedConversation, setSelectedConversation } = useConversationStore();
+
+  const [search, setSearch] = useState("");
+  const [originalConversations, setOriginalConversations] = useState([]);
+
+  useEffect(() => {
+    if (conversations.length > 0 && originalConversations.length === 0) {
+      setOriginalConversations(conversations);
+    }
+  }, [conversations, originalConversations]);
+
+  useEffect(() => {
+    if (!search) {
+      setConversations(originalConversations);
+      return;
+    }
+
+    if (search.length < 3) {
+      toast.error("Search must be at least 3 characters long", { style: toastStyle });
+      return;
+    }
+
+    const filteredConversations = originalConversations.filter((c) => c.username.toLowerCase().includes(search.toLowerCase()));
+
+    if (filteredConversations.length > 0) {
+      setConversations(filteredConversations);
+    } else {
+      toast.error("No such conversation found!", { style: toastStyle });
+    }
+  }, [search, originalConversations, setConversations]);
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
 
   console.log({ isLoading, conversations }, "<----disidebar");
 
   return (
-    <div className="bg-violt-500 flex flex-col gap-10 border-e-[1px] border-slate-500 border-opacity-50 p-8">
+    <div className="bg-violt-500 h-full flex flex-col gap-10 border-e-[1px] border-slate-500 border-opacity-50 p-8">
       {/* Top */}
-      <form action="">
+      <form onSubmit={handleSearchChange}>
         <div className="bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
-          <input type="text" placeholder="Search..." className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
-          <BiSearchAlt size={20} className="text-gray-500" />
+          <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search..." className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
+          <BiSearchAlt size={20} className="text-gray-500 cursor-pointer" />
         </div>
       </form>
 
       {/* Center */}
-      <div className="scrollbar-hide bg-tal-500 flex flex-col gap-4 py-5 border-t-[1px] border-slate-500 border-opacity-50 max-h-96 overflow-y-scroll">
+      <div className="scrollbar-hide bg-tal-500 flex flex-1 flex-col gap-4 py-5 border-t-[1px] border-slate-500 border-opacity-50 max-h-96 overflow-y-scroll">
         {isLoading ? (
           <LoaderComponent />
         ) : conversations.length > 0 ? (
