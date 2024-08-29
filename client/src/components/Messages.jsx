@@ -8,11 +8,13 @@ import useGetMessages from "../hooks/useGetMessages";
 import MessageSkeleton from "./MessageSkeleton";
 import { useAuthContext } from "../context/AuthContext";
 import { format } from "timeago.js";
+import useListenMessages from "../hooks/useListenMessages";
 
 const Messages = () => {
   const { selectedConversation, setSelectedConversation } = useConversationStore();
   const { isLoading, messages } = useGetMessages();
   const { currentUser } = useAuthContext();
+  useListenMessages();
 
   const [message, setMessage] = useState("");
   const { loading, sendMessage } = useSendMessage();
@@ -58,6 +60,7 @@ const Messages = () => {
                 const chatClassName = isSender ? "chat-end" : "chat-start";
                 const profilePic = isSender ? currentUser.profilePicture : selectedConversation.profilePicture;
                 const bubbleBgColor = isSender ? "bg-sky-500" : "";
+                const shakeClass = message.shouldShake ? "shake" : "";
 
                 console.log({ isSender, currentUser }, "<----disender");
 
@@ -68,7 +71,7 @@ const Messages = () => {
                         <img alt="User" src={profilePic} />
                       </div>
                     </div>
-                    <div className={`chat-bubble ${bubbleBgColor} text-white`}>{message.message}</div>
+                    <div className={`chat-bubble ${bubbleBgColor} ${shakeClass} text-white`}>{message.message}</div>
                     <div className="chat-footer opacity-50 text-sm"> {format(message.createdAt)}</div>
                   </div>
                 );
