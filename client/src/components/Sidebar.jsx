@@ -8,6 +8,7 @@ import { getRandomEmoji } from "../utils/emojis";
 import useConversationStore from "../libs/conversationStore";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useSocketContext } from "../context/SocketContext";
 
 const toastStyle = {
   borderRadius: "10px",
@@ -19,6 +20,7 @@ const Sidebar = () => {
   const { loading, logout } = useLogout();
   const { isLoading, conversations, setConversations } = useGetConversation();
   const { selectedConversation, setSelectedConversation } = useConversationStore();
+  const { onlineUsers } = useSocketContext();
 
   const [search, setSearch] = useState("");
   const [originalConversations, setOriginalConversations] = useState([]);
@@ -73,6 +75,9 @@ const Sidebar = () => {
           conversations.map((conversation, idx) => {
             const lastIdx = idx === conversations.length - 1;
             const isSelected = conversation._id === selectedConversation?._id;
+            const isOnline = onlineUsers.includes(conversation._id);
+
+            console.log({ isOnline, onlineUsers }, "<---isOnline di sidebar");
 
             return (
               <div
@@ -83,7 +88,7 @@ const Sidebar = () => {
                 <div className="relative flex items-center gap-2 flex-1">
                   <img src={conversation.profilePicture || "/noAvatar.png"} alt="Avatar" className="w-12 h-12 rounded-full border-[1px] border-slate-500 border-opacity-50 p-1" />
                   <span>{conversation.fullName || conversation.username}</span>
-                  <GoDotFill size={18} className="absolute top-0 left-8 text-green-600" />
+                  {isOnline && <GoDotFill size={18} className="absolute top-0 left-8 text-green-600" />}
                 </div>
                 <span>{getRandomEmoji()}</span>
               </div>
