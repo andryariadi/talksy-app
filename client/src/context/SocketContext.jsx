@@ -19,6 +19,8 @@ export const SocketContextProvider = ({ children }) => {
         query: { userId: currentUser._id },
       });
 
+      console.log(socket, "<---socket disocketcontext");
+
       setSocket(socket);
 
       // socket.on() is used to listen to the events. can be used both on client and server side

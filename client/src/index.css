@@ -81,3 +81,16 @@ body {
     transform: translate3d(4px, 0, 0);
   }
 }
+
+/* input */
+.inpt:focus {
+  outline: 2px solid white;
+}
+
+.inpt:user-valid {
+  outline-color: green;
+}
+
+.inpt:user-invalid {
+  outline-color: crimson;
+}

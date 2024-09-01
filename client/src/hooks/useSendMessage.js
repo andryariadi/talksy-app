@@ -13,7 +13,7 @@ const useSendMessage = () => {
   const [loading, setLoading] = useState(false);
   const { messages, setMessages, selectedConversation } = useConversationStore();
 
-  const sendMessage = async (message) => {
+  const sendMessage = async ({ message, imgUrl }) => {
     setLoading(true);
 
     try {
@@ -21,6 +21,7 @@ const useSendMessage = () => {
         `http://localhost:8000/api/messages/send/${selectedConversation._id}`,
         {
           message,
+          image: imgUrl,
         },
         {
           withCredentials: true,

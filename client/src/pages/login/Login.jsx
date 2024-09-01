@@ -63,7 +63,7 @@ const Login = () => {
           <label htmlFor="" className="text-xs">
             Username
           </label>
-          <div className="bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
+          <div className={`bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary ${errors.username ? "border-rose-800 hover:border-rose-800" : ""} hover:border-primary transition-all duration-300`}>
             <input type="text" placeholder="Username" {...register("username")} className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
             <CiUser size={20} className="text-gray-500" />
           </div>
@@ -74,8 +74,8 @@ const Login = () => {
           <label htmlFor="" className="text-xs">
             Password
           </label>
-          <div className="bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
-            <input type={isPassword ? "text" : "password"} placeholder="Password" {...register("password")} className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
+          <div className={`bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary ${errors.password ? "border-rose-800 hover:border-rose-800" : ""} hover:border-primary transition-all duration-300`}>
+            <input type={isPassword ? "text" : "password"} placeholder="Password" {...register("password")} className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" minLength="6" />
             {isPassword ? (
               <IoIosEyeOff size={24} className="text-gray-500 cursor-pointer" onClick={() => setIsPassword(!isPassword)} />
             ) : (

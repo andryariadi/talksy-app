@@ -1,4 +1,4 @@
-import { IoLogoWechat } from "react-icons/io5";
+import { IoCloseCircleSharp, IoLogoWechat } from "react-icons/io5";
 import { IoIosSend } from "react-icons/io";
 import useConversationStore from "../libs/conversationStore";
 import { useEffect, useRef, useState } from "react";
@@ -9,6 +9,9 @@ import MessageSkeleton from "./MessageSkeleton";
 import { useAuthContext } from "../context/AuthContext";
 import { format } from "timeago.js";
 import useListenMessages from "../hooks/useListenMessages";
+import CldUploadWidget from "./UploadWidget";
+import EmojiPicker from "emoji-picker-react";
+import { BsEmojiWinkFill } from "react-icons/bs";
 
 const Messages = () => {
   const { selectedConversation, setSelectedConversation } = useConversationStore();
@@ -17,9 +20,13 @@ const Messages = () => {
   useListenMessages();
 
   const [message, setMessage] = useState("");
+  const [image, setImage] = useState([]);
+  console.log(image, "<---image di messages.jsx");
+
   const { loading, sendMessage } = useSendMessage();
 
   const lastMessageRef = useRef();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     return setSelectedConversation(null); //cleanup function (unmount)
@@ -34,16 +41,31 @@ const Messages = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!message) return;
+    if (!message && !image) return;
 
-    await sendMessage(message);
+    const imgUrl = image;
+
+    await sendMessage({ message, imgUrl });
     setMessage("");
+    handleCloseImg();
   };
+
+  const handleCloseImg = () => {
+    setImage([]);
+  };
+
+  const handleEmoji = (e) => {
+    console.log(e);
+    setMessage((prev) => prev + e.emoji);
+    setOpen(!open);
+  };
+
+  console.log(message, "<---message di messages.jsx");
 
   return (
     <>
       {selectedConversation ? (
-        <div className="bg-tal-500 flex flex-col gap-2 min-w-[30rem] h-full">
+        <div className="bg-tal-500 flex flex-col gap-2 min-w-[35rem] h-full">
           {/* Top */}
           <div className="relative bg-secondary flex items-center gap-2 px-5 py-3">
             <span className="text-neutral-400 text-sm">To:</span>
@@ -65,17 +87,28 @@ const Messages = () => {
                 console.log({ isSender, currentUser }, "<----disender");
 
                 return (
-                  <div className={`chat ${chatClassName} mb-3`} key={message._id} ref={lastMessageRef}>
-                    <div className="chat-image avatar">
-                      <div className="w-10 rounded-full">
-                        <img alt="User" src={profilePic} />
+                  <>
+                    <div className={`bg-ros-500 chat ${chatClassName} mb-3`} key={message._id} ref={lastMessageRef}>
+                      <div className="chat-image avatar">
+                        <div className="w-10 rounded-full">
+                          <img alt="User" src={profilePic} />
+                        </div>
                       </div>
+                      <div className={`chat-bubble ${bubbleBgColor} ${shakeClass}`} style={{ maxWidth: "70%" }}>
+                        {message.image && <img src={message.image} alt="Image" className={`h-[15rem] w-[70] object-cover rounded-md`} />}
+                        {message.message && <span className="text-white">{message.message}</span>}
+                      </div>
+                      <div className="chat-footer opacity-50 text-sm"> {format(message.createdAt)}</div>
                     </div>
-                    <div className={`chat-bubble ${bubbleBgColor} ${shakeClass} text-white`}>{message.message}</div>
-                    <div className="chat-footer opacity-50 text-sm"> {format(message.createdAt)}</div>
-                  </div>
+                  </>
                 );
               })}
+            {image[0] && (
+              <div className="bg-tal-500 relative">
+                {image[0] && <img src={image} alt="Image" className={`h-[15rem] max-w-[70%] object-cover rounded-md ml-auto`} />}
+                <IoCloseCircleSharp size={22} className="absolute top-0 right-0 cursor-pointer" onClick={handleCloseImg} />
+              </div>
+            )}
 
             {isLoading && [...Array(4)].map((_, i) => <MessageSkeleton key={i} />)}
 
@@ -90,12 +123,32 @@ const Messages = () => {
           </div>
 
           {/* Bottom */}
-          <form onSubmit={handleSubmit} className="bg-sy-500 pb-2 px-5">
-            <div className="bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
-              <input type="text" name="message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type a message..." autoComplete="off" className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
-              {loading ? <div className="loading loading-spinner loading-xs"></div> : <IoIosSend size={20} className="text-gray-500 hover:text-primary transition-all duration-300 cursor-pointer" />}
+          <div className="pb-2 px-5 flex items-center gap-3">
+            <CldUploadWidget
+              uwConfig={{
+                cloudName: "andryariadi",
+                uploadPreset: "talksy",
+                multiple: false,
+                maxImageFileSize: 2000000,
+                folder: "avatars",
+              }}
+              setImage={setImage}
+            />
+
+            <div className="relative flex items-center gap-2">
+              <BsEmojiWinkFill size={18} className="hover:text-primary transition-all duration-300 cursor-pointer" onClick={() => setOpen(!open)} />
+              <div className="absolute -top-[29.5rem] left-0 z-10">
+                <EmojiPicker open={open} theme="dark" onEmojiClick={handleEmoji} />
+              </div>
             </div>
-          </form>
+
+            <form onSubmit={handleSubmit} className="bg-sy-500 flex flex-1 items-center">
+              <div className="bg-secondary p-3 rounded-lg flex flex-1 items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
+                <input type="text" name="message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type a message..." autoComplete="off" className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
+                {loading ? <div className="loading loading-spinner loading-xs"></div> : <IoIosSend size={20} className="text-gray-500 hover:text-primary transition-all duration-300 cursor-pointer" />}
+              </div>
+            </form>
+          </div>
         </div>
       ) : (
         <div className="bg-tal-500 flex flex-col items-center justify-center gap-2 p-10 min-w-[30rem]">

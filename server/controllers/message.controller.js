@@ -4,7 +4,7 @@ import { getReceiverSocketId, io } from "../socket/socket.js";
 
 class Controller {
   static async sendMessage(req, res) {
-    const { message } = req.body;
+    const { message, image } = req.body;
     const { id: receiverId } = req.params;
     const senderId = req.user._id;
 
@@ -23,6 +23,7 @@ class Controller {
         senderId,
         receiverId,
         message,
+        image,
       });
 
       if (newMessage) {
