@@ -3,7 +3,7 @@ import { useSocketContext } from "../context/SocketContext";
 import useConversationStore from "../libs/conversationStore";
 import notificationSound from "../assets/sound/notification.mp3";
 
-const useListenMessages = () => {
+const useListenMessages = (setNewMessage) => {
   const { socket } = useSocketContext();
   const { messages, setMessages } = useConversationStore();
 
@@ -13,10 +13,11 @@ const useListenMessages = () => {
       const sound = new Audio(notificationSound);
       sound.play();
       setMessages([...messages, newMessage]);
+      setNewMessage(newMessage);
     });
 
     return () => socket?.off("newMessage");
-  }, [socket, messages, setMessages]);
+  }, [socket, messages, setMessages, setNewMessage]);
 };
 
 export default useListenMessages;

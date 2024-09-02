@@ -16,7 +16,7 @@ export const getReceiverSocketId = (receiverId) => {
   return userSockets[receiverId];
 };
 
-const userSockets = {};
+const userSockets = {}; // {userId: socketId}
 
 io.on("connection", (socket) => {
   console.log("new user connected", socket.id);

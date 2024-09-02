@@ -12,16 +12,19 @@ import useListenMessages from "../hooks/useListenMessages";
 import CldUploadWidget from "./UploadWidget";
 import EmojiPicker from "emoji-picker-react";
 import { BsEmojiWinkFill } from "react-icons/bs";
+import { MessageNotification } from "./MessageNotification";
 
 const Messages = () => {
   const { selectedConversation, setSelectedConversation } = useConversationStore();
   const { isLoading, messages } = useGetMessages();
   const { currentUser } = useAuthContext();
-  useListenMessages();
 
   const [message, setMessage] = useState("");
+  const [newMessageNotif, setNewMessageNotif] = useState(null);
   const [image, setImage] = useState([]);
   console.log(image, "<---image di messages.jsx");
+
+  console.log(newMessageNotif, "<---newMessageNotif di messages.jsx");
 
   const { loading, sendMessage } = useSendMessage();
 
@@ -29,6 +32,8 @@ const Messages = () => {
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useListenMessages(setNewMessageNotif);
 
   useEffect(() => {
     return setSelectedConversation(null); //cleanup function (unmount)
@@ -39,6 +44,16 @@ const Messages = () => {
       lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 100);
   }, [messages]);
+
+  useEffect(() => {
+    if (newMessageNotif) {
+      const timer = setTimeout(() => {
+        setNewMessageNotif(null);
+      }, 10000);
+
+      return () => clearTimeout(timer); // Cleanup timer on component unmount or when newMessageNotif changes
+    }
+  }, [newMessageNotif]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,7 +108,7 @@ const Messages = () => {
                 const isSender = message.senderId === currentUser._id;
                 const chatClassName = isSender ? "chat-end" : "chat-start";
                 const profilePic = isSender ? currentUser.profilePicture : selectedConversation.profilePicture;
-                const bubbleBgColor = isSender ? "bg-sky-500" : "";
+                const bubbleBgColor = isSender ? "bg-primary" : "";
                 const shakeClass = message.shouldShake ? "shake" : "";
 
                 console.log({ isSender, currentUser }, "<----disender");
@@ -179,6 +194,8 @@ const Messages = () => {
           <IoCloseCircleSharp size={22} className="absolute top-0 right-0 cursor-pointer" onClick={handleCloseModal} />
         </div>
       )}
+
+      {newMessageNotif && <MessageNotification message={newMessageNotif} />}
     </>
   );
 };
