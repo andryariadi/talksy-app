@@ -27,6 +27,8 @@ const Messages = () => {
 
   const lastMessageRef = useRef();
   const [open, setOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     return setSelectedConversation(null); //cleanup function (unmount)
@@ -58,6 +60,16 @@ const Messages = () => {
     console.log(e);
     setMessage((prev) => prev + e.emoji);
     setOpen(!open);
+  };
+
+  const handleOpenModal = (image) => {
+    setSelectedImage(image);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
   };
 
   console.log(message, "<---message di messages.jsx");
@@ -95,7 +107,8 @@ const Messages = () => {
                         </div>
                       </div>
                       <div className={`chat-bubble ${bubbleBgColor} ${shakeClass}`} style={{ maxWidth: "70%" }}>
-                        {message.image && <img src={message.image} alt="Image" className={`h-[15rem] w-[70] object-cover rounded-md`} />}
+                        {message.image && <img src={message.image} alt="Image" className={`h-[15rem] w-[70] object-cover rounded-md`} onClick={() => handleOpenModal(message.image)} />}
+
                         {message.message && <span className="text-white">{message.message}</span>}
                       </div>
                       <div className="chat-footer opacity-50 text-sm"> {format(message.createdAt)}</div>
@@ -157,6 +170,13 @@ const Messages = () => {
           </h1>
           <h2 className="text-xl">Select a chat to start messaging</h2>
           <IoLogoWechat size={70} className="text-gray-500 hover:text-primary transition-all duration-300" />
+        </div>
+      )}
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <img src={selectedImage} alt="Selected" className=" object-cover" />
+          <IoCloseCircleSharp size={22} className="absolute top-0 right-0 cursor-pointer" onClick={handleCloseModal} />
         </div>
       )}
     </>
