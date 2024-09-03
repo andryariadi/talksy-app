@@ -5,13 +5,13 @@ const userSchema = new mongoose.Schema(
     fullName: {
       type: String,
       required: true,
-      min: 3,
+      min: 4,
       max: 20,
     },
     username: {
       type: String,
       required: true,
-      min: 3,
+      min: 4,
       max: 20,
       unique: true,
     },
@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       min: 6,
+      max: 20,
     },
     gender: {
       type: String,

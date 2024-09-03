@@ -18,17 +18,13 @@ const Messages = () => {
   const { selectedConversation, setSelectedConversation } = useConversationStore();
   const { isLoading, messages } = useGetMessages();
   const { currentUser } = useAuthContext();
+  const { loading, sendMessage } = useSendMessage();
+  const lastMessageRef = useRef();
 
   const [message, setMessage] = useState("");
   const [newMessageNotif, setNewMessageNotif] = useState(null);
   const [image, setImage] = useState([]);
-  console.log(image, "<---image di messages.jsx");
 
-  console.log(newMessageNotif, "<---newMessageNotif di messages.jsx");
-
-  const { loading, sendMessage } = useSendMessage();
-
-  const lastMessageRef = useRef();
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -87,8 +83,6 @@ const Messages = () => {
     setSelectedImage(null);
   };
 
-  console.log(message, "<---message di messages.jsx");
-
   return (
     <>
       {selectedConversation ? (
@@ -122,7 +116,7 @@ const Messages = () => {
                         </div>
                       </div>
                       <div className={`chat-bubble ${bubbleBgColor} ${shakeClass}`} style={{ maxWidth: "70%" }}>
-                        {message.image && <img src={message.image} alt="Image" className={`h-[15rem] w-[70] object-cover rounded-md`} onClick={() => handleOpenModal(message.image)} />}
+                        {message.image[0] && <img src={message.image} alt="Image" className={`h-[15rem] w-[70] object-cover rounded-md`} onClick={() => handleOpenModal(message.image)} />}
 
                         {message.message && <span className="text-white">{message.message}</span>}
                       </div>

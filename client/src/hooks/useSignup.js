@@ -12,19 +12,24 @@ const toastStyle = {
 
 const useSignup = () => {
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   //   const navigate = useNavigate();
 
   const { setCurrentUser } = useAuthContext();
 
   const signup = async ({ fullName, username, password, confirmPassword, gender }) => {
-    const success = handleInputErrors({
+    const errorMessages = handleInputErrors({
       fullName,
       username,
       password,
       confirmPassword,
       gender,
     });
-    if (!success) return;
+
+    if (Object.keys(errorMessages).length > 0) {
+      setErrors(errorMessages);
+      return;
+    }
 
     setLoading(true);
     try {
@@ -40,13 +45,15 @@ const useSignup = () => {
 
       localStorage.setItem("authUser", JSON.stringify(res));
 
-      setCurrentUser(res.data);
+      setCurrentUser(res.data.newUser);
 
       toast.success("Account created successfully!", {
         style: toastStyle,
       });
 
       //   navigate("/login");
+
+      setErrors({});
 
       console.log(res, "<---disignuphook");
     } catch (error) {
@@ -59,73 +66,59 @@ const useSignup = () => {
     }
   };
 
-  return { signup, loading };
+  return { signup, loading, errors };
 };
 
 export default useSignup;
 
 function handleInputErrors({ fullName, username, password, confirmPassword, gender }) {
+  const errors = {};
+
   if (!fullName) {
-    toast.error("Please enter a fullName", {
-      style: toastStyle,
-    });
-    return false;
-  }
-  if (fullName.length < 3 || fullName.length > 20) {
-    toast.error("Fullname must be between 3 and 20 characters", {
-      style: toastStyle,
-    });
-    return false;
+    errors.fullName = "Please enter a full name!";
+    toast.error(errors.fullName, { style: toastStyle });
+    return errors;
+  } else if (fullName.length < 4 || fullName.length > 20) {
+    errors.fullName = "Full name must be between 4 and 20 characters!";
+    toast.error(errors.fullName, { style: toastStyle });
+    return errors;
   }
 
   if (!username) {
-    toast.error("Please enter a username", {
-      style: toastStyle,
-    });
-    return false;
-  }
-
-  if (username.length < 3 || username.length > 20) {
-    toast.error("Username must be between 3 and 20 characters", {
-      style: toastStyle,
-    });
-    return false;
+    errors.username = "Please enter a username!";
+    toast.error(errors.username, { style: toastStyle });
+    return errors;
+  } else if (username.length < 4 || username.length > 20) {
+    errors.username = "Username must be between 4 and 20 characters!";
+    toast.error(errors.username, { style: toastStyle });
+    return errors;
   }
 
   if (!password) {
-    toast.error("Please enter a password", {
-      style: toastStyle,
-    });
-    return false;
-  }
-
-  if (password.length < 3 || password.length > 20) {
-    toast.error("Password must be between 3 and 20 characters", {
-      style: toastStyle,
-    });
-    return false;
+    errors.password = "Please enter a password!";
+    toast.error(errors.password, { style: toastStyle });
+    return errors;
+  } else if (password.length < 6 || password.length > 20) {
+    errors.password = "Password must be between 6 and 20 characters!";
+    toast.error(errors.password, { style: toastStyle });
+    return errors;
   }
 
   if (!confirmPassword) {
-    toast.error("Please confirm your password", {
-      style: toastStyle,
-    });
-    return false;
-  }
-
-  if (password !== confirmPassword) {
-    toast.error("Passwords do not match", {
-      style: toastStyle,
-    });
-    return false;
+    errors.confirmPassword = "Please confirm your password!";
+    toast.error(errors.confirmPassword, { style: toastStyle });
+    return errors;
+  } else if (password !== confirmPassword) {
+    errors.confirmPassword = "Passwords do not match!";
+    toast.error(errors.confirmPassword, { style: toastStyle });
+    return errors;
   }
 
   if (!gender) {
-    toast.error("Please select a gender", {
-      style: toastStyle,
-    });
-    return false;
+    errors.gender = "Please select a gender!";
+    toast.error(errors.gender, { style: toastStyle });
+    return errors;
   }
 
-  return true;
+  return errors;
 }

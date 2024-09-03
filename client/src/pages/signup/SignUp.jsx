@@ -18,7 +18,7 @@ const SignUp = () => {
     gender: "",
   });
 
-  const { loading, signup } = useSignup();
+  const { loading, signup, errors } = useSignup();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,7 +52,7 @@ const SignUp = () => {
           <label htmlFor="" className="text-xs">
             Fullname
           </label>
-          <div className="bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
+          <div className={`bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary ${errors.fullName ? "border-rose-800 hover:border-rose-800" : ""} hover:border-primary transition-all duration-300`}>
             <input type="text" placeholder="Fullname" name="fullName" value={inputs.fullName} onChange={handleChange} className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
             <CiUser size={20} className="text-gray-500" />
           </div>
@@ -62,7 +62,7 @@ const SignUp = () => {
           <label htmlFor="" className="text-xs">
             Username
           </label>
-          <div className="bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
+          <div className={`bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary ${errors.username ? "border-rose-800 hover:border-rose-800" : ""} hover:border-primary transition-all duration-300`}>
             <input type="text" placeholder="Username" name="username" value={inputs.username} onChange={handleChange} className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
             <CiUser size={20} className="text-gray-500" />
           </div>
@@ -72,7 +72,7 @@ const SignUp = () => {
           <label htmlFor="" className="text-xs">
             Password
           </label>
-          <div className="bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
+          <div className={`bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary ${errors.password ? "border-rose-800 hover:border-rose-800" : ""} hover:border-primary transition-all duration-300`}>
             <input type={isPassword ? "text" : "password"} placeholder="Password" name="password" value={inputs.password} onChange={handleChange} className="bg-transparent outline-none text-xs placeholder:text-xs flex-1" />
             {isPassword ? (
               <IoIosEyeOff size={24} className="text-gray-500 cursor-pointer" onClick={() => setIsPassword(!isPassword)} />
@@ -86,7 +86,7 @@ const SignUp = () => {
           <label htmlFor="" className="text-xs">
             Confirm Password
           </label>
-          <div className="bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary hover:border-primary transition-all duration-300">
+          <div className={`bg-secondary p-3 rounded-lg flex items-center gap-2 border border-secondary ${errors.confirmPassword ? "border-rose-800 hover:border-rose-800" : ""} hover:border-primary transition-all duration-300`}>
             <input
               type={isPasswordConfirm ? "text" : "password"}
               placeholder="Confirm Password"
@@ -104,7 +104,7 @@ const SignUp = () => {
         </div>
 
         <div className="col-span-2">
-          <GenderCheckbox onCheckboxChange={handleCheckboxChange} selectedGender={inputs.gender} />
+          <GenderCheckbox onCheckboxChange={handleCheckboxChange} selectedGender={inputs.gender} errors={errors} />
         </div>
 
         <div className="flex flex-col gap-2 col-span-2">
