@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
 
@@ -8,6 +8,14 @@ export const useAuthContext = () => {
 
 export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem("authUser")) || null);
+
+  useEffect(() => {
+    if (currentUser) {
+      localStorage.setItem("authUser", JSON.stringify(currentUser));
+    } else {
+      localStorage.removeItem("authUser");
+    }
+  }, [currentUser]);
 
   console.log(currentUser, "<----authcontextprovider");
 

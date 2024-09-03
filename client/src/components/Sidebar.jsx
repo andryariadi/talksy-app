@@ -19,6 +19,7 @@ const toastStyle = {
 const Sidebar = () => {
   const { loading, logout } = useLogout();
   const { isLoading, conversations, setConversations } = useGetConversation();
+
   const { selectedConversation, setSelectedConversation } = useConversationStore();
   const { onlineUsers } = useSocketContext();
 
@@ -55,7 +56,7 @@ const Sidebar = () => {
     setSearch(e.target.value);
   };
 
-  console.log({ isLoading, conversations }, "<----disidebar");
+  console.log({ isLoading, conversations }, "<----disidebar2");
 
   return (
     <div className="bg-violt-500 h-full flex flex-col gap-10 border-e-[1px] border-slate-500 border-opacity-50 p-8">

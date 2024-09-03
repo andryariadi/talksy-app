@@ -1,8 +1,8 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
-// import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+// import { useAuthContext } from "../context/AuthContext";
 
 const toastStyle = {
   borderRadius: "10px",
@@ -13,9 +13,9 @@ const toastStyle = {
 const useSignup = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  const { setCurrentUser } = useAuthContext();
+  // const { setCurrentUser } = useAuthContext();
 
   const signup = async ({ fullName, username, password, confirmPassword, gender }) => {
     const errorMessages = handleInputErrors({
@@ -43,17 +43,17 @@ const useSignup = () => {
 
       if (res.error) throw new Error(res.error);
 
-      localStorage.setItem("authUser", JSON.stringify(res));
+      localStorage.setItem("authUser", JSON.stringify(res.data.newUser));
 
-      setCurrentUser(res.data.newUser);
+      // setCurrentUser(res.data.newUser);
 
       toast.success("Account created successfully!", {
         style: toastStyle,
       });
 
-      //   navigate("/login");
-
       setErrors({});
+
+      navigate("/login");
 
       console.log(res, "<---disignuphook");
     } catch (error) {
