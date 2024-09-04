@@ -14,7 +14,7 @@ const useLoginHookForm = () => {
   const loginForm = async ({ username, password }) => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/auth/login`,
+        "https://talksy-server.vercel.app/api/auth/login",
         {
           username,
           password,
