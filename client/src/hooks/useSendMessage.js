@@ -18,7 +18,7 @@ const useSendMessage = () => {
 
     try {
       const res = await axios.post(
-        `http://localhost:8000/api/messages/send/${selectedConversation._id}`,
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/messages/send/${selectedConversation._id}`,
         {
           message,
           image: imgUrl,

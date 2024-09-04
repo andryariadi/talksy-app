@@ -33,7 +33,7 @@ const useSignup = () => {
 
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8000/api/auth/singup", {
+      const res = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/auth/singup`, {
         fullName,
         username,
         password,

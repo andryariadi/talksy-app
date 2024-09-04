@@ -10,7 +10,7 @@ const useLogout = () => {
   const logout = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8000/api/auth/logout");
+      const res = await axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/auth/logout`);
 
       if (res.error) throw new Error(res.error);
 
